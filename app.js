@@ -4,8 +4,11 @@ const $ = (id) => document.getElementById(id);
 
 const ROLE_LABELS = { chef: 'Geheimdienstchef', ermittler: 'Ermittler' };
 const CARD_LABELS = { agent: 'Agent', neutral: 'Passant', assassin: 'Attentäter' };
+const THEME_ICONS = {
+  klassisch: '🕵️', tiere: '🐾', fantasy: '🐉', harrypotter: '⚡', essen: '🍕', weltraum: '🚀', sport: '⚽',
+};
 
-let game = null; // { room, theme, role, board, history, selected, resultDismissed }
+let game = null; // { room, theme, role, board, history, selected, justRevealed, resultDismissed }
 
 // Der klassische Spielstand behält seinen ursprünglichen Schlüssel.
 function storageKey(room, theme) {
@@ -45,13 +48,14 @@ function startGame(room, theme, role) {
     board: createBoard(room, theme, THEMES[theme].words),
     history: loadHistory(room, theme),
     selected: null,
+    justRevealed: null,
     resultDismissed: false,
   };
   $('menu').hidden = true;
   $('game').hidden = false;
   document.body.dataset.role = role;
   $('room-label').textContent = `Raum ${room}`;
-  $('theme-label').textContent = `Thema: ${THEMES[theme].name}`;
+  $('theme-label').textContent = `${THEME_ICONS[theme] || ''} ${THEMES[theme].name}`.trim();
   $('role-label').textContent = ROLE_LABELS[role];
   render();
 }
@@ -91,6 +95,7 @@ function render() {
     const isRevealed = state.revealed.has(index);
     el.classList.toggle('revealed', isRevealed);
     el.classList.toggle('selected', game.selected === index);
+    el.classList.toggle('flip', game.justRevealed === index);
     el.disabled = isRevealed || Boolean(state.result);
 
     const word = document.createElement('span');
@@ -103,6 +108,15 @@ function render() {
     }
     boardEl.append(el);
   });
+  game.justRevealed = null;
+
+  const progress = $('progress');
+  progress.textContent = '';
+  for (let i = 0; i < AGENTS; i++) {
+    const seg = document.createElement('span');
+    seg.classList.toggle('on', i < state.found);
+    progress.append(seg);
+  }
 
   $('stat-found').textContent = `${state.found}/${AGENTS} Agenten`;
   $('stat-round').textContent = `Runde ${state.round}`;
@@ -110,6 +124,7 @@ function render() {
   $('pass').disabled = Boolean(state.result);
 
   $('hint').textContent = hintText(state);
+  $('hint').dataset.tone = state.result || (game.selected !== null ? 'select' : '');
 
   if (state.result && !game.resultDismissed) showResult(state);
   else $('result').hidden = true;
@@ -137,6 +152,7 @@ function showResult(state) {
 function onCardClick(index) {
   if (game.selected === index) {
     game.selected = null;
+    game.justRevealed = index;
     game.history.push({ type: 'reveal', index });
     saveHistory();
   } else {
@@ -170,7 +186,10 @@ for (const [id, theme] of Object.entries(THEMES)) {
   input.value = id;
   input.checked = id === (THEMES[savedTheme] ? savedTheme : DEFAULT_THEME);
   const name = document.createElement('span');
-  name.textContent = theme.name;
+  const icon = document.createElement('span');
+  icon.setAttribute('aria-hidden', 'true');
+  icon.textContent = THEME_ICONS[id] || '';
+  name.append(icon, theme.name);
   label.append(input, name);
   $('themes').append(label);
 }
