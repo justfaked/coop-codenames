@@ -3,7 +3,7 @@
 const $ = (id) => document.getElementById(id);
 
 const ROLE_LABELS = { chef: 'Geheimdienstchef', ermittler: 'Ermittler' };
-const CARD_LABELS = { agent: 'Agent', neutral: 'Passant', assassin: 'Attentäter' };
+const CARD_LABELS = { agent: 'Richtig', neutral: 'Falsch', assassin: 'Falle' };
 const THEME_ICONS = {
   klassisch: '🕵️', tiere: '🐾', fantasy: '🐉', harrypotter: '⚡', essen: '🍕', weltraum: '🚀', sport: '⚽',
 };
@@ -118,7 +118,7 @@ function render() {
     progress.append(seg);
   }
 
-  $('stat-found').textContent = `${state.found}/${AGENTS} Agenten`;
+  $('stat-found').textContent = `${state.found}/${AGENTS} Richtige`;
   $('stat-round').textContent = `Runde ${state.round}`;
   $('undo').disabled = game.history.length === 0;
   $('pass').disabled = Boolean(state.result);
@@ -131,8 +131,8 @@ function render() {
 }
 
 function hintText(state) {
-  if (state.result === 'won') return 'Gewonnen! Alle Agenten gefunden.';
-  if (state.result === 'lost') return 'Verloren – ein Attentäter wurde aufgedeckt.';
+  if (state.result === 'won') return 'Gewonnen! Alle Richtigen gefunden.';
+  if (state.result === 'lost') return 'Verloren – eine Falle wurde aufgedeckt.';
   if (game.selected !== null) return `„${game.board[game.selected].word}“ nochmal antippen zum Aufdecken.`;
   if (game.role === 'chef') return 'Gib einen Hinweis: ein Wort und eine Zahl.';
   return 'Tippe auf einen Begriff, um ihn auszuwählen.';
@@ -143,8 +143,8 @@ function showResult(state) {
   const rounds = state.round;
   $('result-title').textContent = won ? 'Gewonnen!' : 'Verloren';
   $('result-text').textContent = won
-    ? `Alle ${AGENTS} Agenten in ${rounds} ${rounds === 1 ? 'Runde' : 'Runden'} gefunden.`
-    : `Ein Attentäter wurde aufgedeckt. ${state.found} von ${AGENTS} Agenten gefunden.`;
+    ? `Alle ${AGENTS} Richtigen in ${rounds} ${rounds === 1 ? 'Runde' : 'Runden'} gefunden.`
+    : `Eine Falle wurde aufgedeckt. ${state.found} von ${AGENTS} Richtigen gefunden.`;
   $('result').classList.toggle('lost', !won);
   $('result').hidden = false;
 }
