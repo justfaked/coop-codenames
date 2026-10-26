@@ -1,0 +1,215 @@
+:root {
+  --bg: #1d2430;
+  --surface: #283141;
+  --text: #f2efe8;
+  --muted: #a6adba;
+  --accent: #2f9e5b;
+  --card: #efe6d2;
+  --card-text: #2b2620;
+  --agent: #2f9e5b;
+  --neutral: #7d6f57;
+  --assassin: #15171b;
+  --danger: #c8443a;
+  --radius: 10px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[hidden] { display: none !important; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid #3a4558;
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.4; cursor: default; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+button.link { background: none; border: none; padding: 0.25rem 0; color: var(--muted); text-decoration: underline; }
+button.icon { padding: 0.4rem 0.75rem; font-size: 1.2rem; line-height: 1; }
+
+/* --- Menü --- */
+
+#menu {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 2rem 16px 3rem;
+}
+
+h1 { font-size: 2.2rem; margin: 0 0 0.5rem; letter-spacing: 0.02em; }
+h1 span { color: var(--accent); }
+.lead { color: var(--muted); margin: 0 0 1.5rem; line-height: 1.45; }
+
+#join { display: flex; flex-direction: column; gap: 0.6rem; }
+#join > label { font-weight: 600; }
+
+#room {
+  font: inherit;
+  font-size: 1.8rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid #3a4558;
+  background: var(--surface);
+  color: var(--text);
+  width: 100%;
+}
+#random-room { align-self: flex-end; }
+
+fieldset { border: none; padding: 0; margin: 0.5rem 0; display: grid; gap: 0.5rem; }
+legend { font-weight: 600; margin-bottom: 0.5rem; }
+
+.role {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  background: var(--surface);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.role:has(input:checked) { border-color: var(--accent); }
+.role input { accent-color: var(--accent); width: 1.2rem; height: 1.2rem; margin: 0; }
+.role span { display: flex; flex-direction: column; }
+.role small { color: var(--muted); }
+
+#join .primary { margin-top: 0.5rem; padding: 0.9rem; font-size: 1.1rem; }
+
+.rules { margin-top: 2rem; background: var(--surface); border-radius: var(--radius); padding: 0.8rem 1rem; }
+.rules summary { cursor: pointer; font-weight: 600; }
+.rules ul { padding-left: 1.2rem; margin: 0.75rem 0 0; line-height: 1.5; }
+.rules li + li { margin-top: 0.4rem; }
+
+/* --- Spiel --- */
+
+#game {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0.75rem 16px 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bar { display: flex; align-items: center; gap: 0.75rem; }
+.info { flex: 1; min-width: 0; }
+#room-label { font-weight: 700; font-size: 1.1rem; }
+#role-label { color: var(--muted); font-size: 0.9rem; }
+body[data-role="chef"] #role-label { color: #f0c05a; }
+.stats { display: flex; flex-direction: column; align-items: flex-end; font-size: 0.9rem; }
+#stat-found { font-weight: 700; color: var(--agent); }
+#stat-round { color: var(--muted); }
+
+.hint { margin: 0; min-height: 1.4em; color: var(--muted); text-align: center; font-size: 0.95rem; }
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(4px, 1.2vw, 10px);
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  padding: 2px;
+  background: var(--card);
+  color: var(--card-text);
+  border: 3px solid transparent;
+  border-radius: 8px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, background 0.2s;
+}
+.card:disabled { opacity: 1; }
+.card:not(:disabled):active { transform: scale(0.96); }
+
+.word {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(0.5rem, 2.5vw, 1.15rem);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-align: center;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.card.selected {
+  border-color: #f0c05a;
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 3px rgba(240, 192, 90, 0.35), 0 4px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Geheimdienstchef sieht die Farben dauerhaft; bei Spielende sehen sie alle. */
+body[data-role="chef"] .card[data-role="agent"],
+.board.over .card[data-role="agent"] { background: #bfe3c8; box-shadow: inset 0 0 0 4px var(--agent); }
+body[data-role="chef"] .card[data-role="assassin"],
+.board.over .card[data-role="assassin"] { background: #4a4d55; color: #fff; box-shadow: inset 0 0 0 4px var(--assassin); }
+
+/* Aufgedeckte Karten */
+.board .card.revealed[data-role="agent"] { background: var(--agent); color: #fff; box-shadow: none; }
+.board .card.revealed[data-role="neutral"] { background: var(--neutral); color: rgba(255, 255, 255, 0.6); box-shadow: none; }
+.board .card.revealed[data-role="assassin"] { background: var(--assassin); color: #fff; box-shadow: 0 0 0 3px var(--danger); }
+.card.revealed .word { text-decoration: line-through; text-decoration-thickness: 2px; }
+.board .card.revealed[data-role="agent"] .word,
+.board .card.revealed[data-role="assassin"] .word { text-decoration: none; }
+.board .card.revealed[data-role="agent"]::after,
+.board .card.revealed[data-role="assassin"]::after {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  font-size: clamp(0.55rem, 1.8vw, 0.85rem);
+}
+.board .card.revealed[data-role="agent"]::after { content: "✓"; }
+.board .card.revealed[data-role="assassin"]::after { content: "✕"; color: var(--danger); }
+
+.actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.actions button { padding: 0.7rem 0.4rem; font-size: 0.9rem; }
+
+/* --- Ergebnis --- */
+
+.result {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 12, 16, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 10;
+}
+.result-box {
+  background: var(--surface);
+  border-top: 6px solid var(--agent);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  max-width: 24rem;
+  width: 100%;
+  text-align: center;
+}
+.result.lost .result-box { border-top-color: var(--danger); }
+.result-box h2 { margin: 0 0 0.5rem; font-size: 1.8rem; }
+.result-box p { color: var(--muted); margin: 0 0 1.25rem; line-height: 1.45; }
+.result-actions { display: grid; gap: 0.5rem; }
+
+@media (min-width: 700px) {
+  #game { padding-top: 1.5rem; }
+}

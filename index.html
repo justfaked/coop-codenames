@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d2430">
+  <title>Codenames Koop</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232f9e5b'/><text x='50' y='68' font-size='56' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>C</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="menu" class="screen">
+    <h1>Codenames <span>Koop</span></h1>
+    <p class="lead">Ein Team, ein Spielfeld. Alle geben dieselbe Raumnummer ein und sehen dasselbe Feld.</p>
+
+    <form id="join">
+      <label for="room">Raumnummer</label>
+      <input id="room" name="room" inputmode="numeric" pattern="[0-9]*" maxlength="9" autocomplete="off" placeholder="z. B. 4711" required>
+      <button type="button" id="random-room" class="link">Zufällige Nummer</button>
+
+      <fieldset>
+        <legend>Deine Rolle</legend>
+        <label class="role">
+          <input type="radio" name="role" value="ermittler" checked>
+          <span><strong>Ermittler</strong><small>Rät die Begriffe, sieht keine Farben</small></span>
+        </label>
+        <label class="role">
+          <input type="radio" name="role" value="chef">
+          <span><strong>Geheimdienstchef</strong><small>Sieht, welche Begriffe gefunden werden müssen</small></span>
+        </label>
+      </fieldset>
+
+      <button type="submit" class="primary">Spiel beitreten</button>
+    </form>
+
+    <details class="rules">
+      <summary>Spielregeln</summary>
+      <ul>
+        <li>Unter den 25 Begriffen verstecken sich <strong>9 Agenten</strong> (grün), <strong>2 Attentäter</strong> (schwarz) und 14 Passanten.</li>
+        <li>Der Geheimdienstchef gibt pro Runde einen Hinweis: <em>ein Wort und eine Zahl</em>, z. B. „Wasser 3“.</li>
+        <li>Die Ermittler tippen auf einen Begriff und tippen zur Bestätigung erneut darauf. Dann wird er aufgedeckt.</li>
+        <li>Agent: weiterraten (höchstens Zahl + 1). Passant: die Runde endet. Attentäter: das Spiel ist verloren.</li>
+        <li>Ziel: alle 9 Agenten in möglichst wenigen Runden finden.</li>
+        <li>Es gibt keine Verbindung zwischen den Geräten. Sagt laut an, was aufgedeckt wird, und tippt es auf jedem Gerät an.</li>
+      </ul>
+    </details>
+  </main>
+
+  <main id="game" class="screen" hidden>
+    <header class="bar">
+      <button type="button" id="back" class="icon" aria-label="Zurück zum Menü">←</button>
+      <div class="info">
+        <div id="room-label"></div>
+        <div id="role-label"></div>
+      </div>
+      <div class="stats">
+        <span id="stat-found" title="Gefundene Agenten"></span>
+        <span id="stat-round" title="Aktuelle Runde"></span>
+      </div>
+    </header>
+
+    <p id="hint" class="hint" aria-live="polite"></p>
+
+    <div id="board" class="board" role="grid"></div>
+
+    <footer class="actions">
+      <button type="button" id="undo">Rückgängig</button>
+      <button type="button" id="pass">Runde beenden</button>
+      <button type="button" id="next">Nächstes Spiel</button>
+    </footer>
+  </main>
+
+  <div id="result" class="result" hidden>
+    <div class="result-box">
+      <h2 id="result-title"></h2>
+      <p id="result-text"></p>
+      <div class="result-actions">
+        <button type="button" id="result-close">Spielfeld ansehen</button>
+        <button type="button" id="result-next" class="primary">Nächstes Spiel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="words.js"></script>
+  <script src="game.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
