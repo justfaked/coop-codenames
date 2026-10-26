@@ -89,6 +89,22 @@ legend { font-weight: 600; margin-bottom: 0.5rem; }
 .role span { display: flex; flex-direction: column; }
 .role small { color: var(--muted); }
 
+legend small { font-weight: 400; color: var(--muted); }
+
+.themes { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.theme { position: relative; cursor: pointer; }
+.theme input { position: absolute; opacity: 0; pointer-events: none; }
+.theme span {
+  display: block;
+  padding: 0.45rem 0.85rem;
+  background: var(--surface);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-size: 0.95rem;
+}
+.theme input:checked + span { border-color: var(--accent); background: #24402f; }
+.theme input:focus-visible + span { outline: 2px solid var(--text); outline-offset: 2px; }
+
 #join .primary { margin-top: 0.5rem; padding: 0.9rem; font-size: 1.1rem; }
 
 .rules { margin-top: 2rem; background: var(--surface); border-radius: var(--radius); padding: 0.8rem 1rem; }
@@ -110,7 +126,8 @@ legend { font-weight: 600; margin-bottom: 0.5rem; }
 .bar { display: flex; align-items: center; gap: 0.75rem; }
 .info { flex: 1; min-width: 0; }
 #room-label { font-weight: 700; font-size: 1.1rem; }
-#role-label { color: var(--muted); font-size: 0.9rem; }
+#theme-label, #role-label { color: var(--muted); font-size: 0.9rem; }
+#theme-label:empty { display: none; }
 body[data-role="chef"] #role-label { color: #f0c05a; }
 .stats { display: flex; flex-direction: column; align-items: flex-end; font-size: 0.9rem; }
 #stat-found { font-weight: 700; color: var(--agent); }

@@ -5,15 +5,16 @@ const $ = (id) => document.getElementById(id);
 const ROLE_LABELS = { chef: 'Geheimdienstchef', ermittler: 'Ermittler' };
 const CARD_LABELS = { agent: 'Agent', neutral: 'Passant', assassin: 'Attentäter' };
 
-let game = null; // { room, role, board, history, selected, resultDismissed }
+let game = null; // { room, theme, role, board, history, selected, resultDismissed }
 
-function storageKey(room) {
-  return `coop-codenames:${room}`;
+// Der klassische Spielstand behält seinen ursprünglichen Schlüssel.
+function storageKey(room, theme) {
+  return theme === DEFAULT_THEME ? `coop-codenames:${room}` : `coop-codenames:${theme}:${room}`;
 }
 
-function loadHistory(room) {
+function loadHistory(room, theme) {
   try {
-    const parsed = JSON.parse(localStorage.getItem(storageKey(room)));
+    const parsed = JSON.parse(localStorage.getItem(storageKey(room, theme)));
     return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
@@ -22,7 +23,7 @@ function loadHistory(room) {
 
 function saveHistory() {
   try {
-    localStorage.setItem(storageKey(game.room), JSON.stringify(game.history));
+    localStorage.setItem(storageKey(game.room, game.theme), JSON.stringify(game.history));
   } catch {
     // Ohne Speicher läuft das Spiel trotzdem, nur ohne Fortsetzen nach Neuladen.
   }
@@ -31,16 +32,18 @@ function saveHistory() {
 function readHash() {
   const params = new URLSearchParams(location.hash.slice(1));
   const room = normalizeRoom(params.get('raum') || '');
+  const theme = params.get('thema') || DEFAULT_THEME;
   const role = params.get('rolle');
-  return room && ROLE_LABELS[role] ? { room, role } : null;
+  return room && THEMES[theme] && ROLE_LABELS[role] ? { room, theme, role } : null;
 }
 
-function startGame(room, role) {
+function startGame(room, theme, role) {
   game = {
     room,
+    theme,
     role,
-    board: createBoard(room, WORDS),
-    history: loadHistory(room),
+    board: createBoard(room, theme, THEMES[theme].words),
+    history: loadHistory(room, theme),
     selected: null,
     resultDismissed: false,
   };
@@ -48,6 +51,7 @@ function startGame(room, role) {
   $('game').hidden = false;
   document.body.dataset.role = role;
   $('room-label').textContent = `Raum ${room}`;
+  $('theme-label').textContent = `Thema: ${THEMES[theme].name}`;
   $('role-label').textContent = ROLE_LABELS[role];
   render();
 }
@@ -62,12 +66,12 @@ function showMenu() {
 
 function route() {
   const target = readHash();
-  if (target) startGame(target.room, target.role);
+  if (target) startGame(target.room, target.theme, target.role);
   else showMenu();
 }
 
-function go(room, role) {
-  const hash = `#raum=${room}&rolle=${role}`;
+function go(room, theme, role) {
+  const hash = `#raum=${room}&thema=${theme}&rolle=${role}`;
   if (location.hash === hash) route();
   else location.hash = hash;
 }
@@ -143,7 +147,7 @@ function onCardClick(index) {
 
 function nextGame() {
   const next = String(Number(game.room) + 1);
-  go(next, game.role);
+  go(next, game.theme, game.role);
 }
 
 // --- Menü ---
@@ -152,6 +156,24 @@ const savedRoom = (() => {
   try { return localStorage.getItem('coop-codenames:last-room') || ''; } catch { return ''; }
 })();
 $('room').value = savedRoom;
+
+const savedTheme = (() => {
+  try { return localStorage.getItem('coop-codenames:last-theme'); } catch { return null; }
+})();
+
+for (const [id, theme] of Object.entries(THEMES)) {
+  const label = document.createElement('label');
+  label.className = 'theme';
+  const input = document.createElement('input');
+  input.type = 'radio';
+  input.name = 'theme';
+  input.value = id;
+  input.checked = id === (THEMES[savedTheme] ? savedTheme : DEFAULT_THEME);
+  const name = document.createElement('span');
+  name.textContent = theme.name;
+  label.append(input, name);
+  $('themes').append(label);
+}
 
 $('random-room').addEventListener('click', () => {
   $('room').value = String(1000 + Math.floor(Math.random() * 9000));
@@ -165,9 +187,14 @@ $('join').addEventListener('submit', (e) => {
   e.preventDefault();
   const room = normalizeRoom($('room').value);
   if (!room) return;
-  const role = new FormData(e.target).get('role');
-  try { localStorage.setItem('coop-codenames:last-room', room); } catch {}
-  go(room, role);
+  const form = new FormData(e.target);
+  const theme = form.get('theme');
+  const role = form.get('role');
+  try {
+    localStorage.setItem('coop-codenames:last-room', room);
+    localStorage.setItem('coop-codenames:last-theme', theme);
+  } catch {}
+  go(room, theme, role);
 });
 
 // --- Spiel ---

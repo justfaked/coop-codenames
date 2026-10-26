@@ -19,6 +19,11 @@
       <button type="button" id="random-room" class="link">Zufällige Nummer</button>
 
       <fieldset>
+        <legend>Thema <small>(alle müssen dasselbe wählen)</small></legend>
+        <div id="themes" class="themes"></div>
+      </fieldset>
+
+      <fieldset>
         <legend>Deine Rolle</legend>
         <label class="role">
           <input type="radio" name="role" value="ermittler" checked>
@@ -51,6 +56,7 @@
       <button type="button" id="back" class="icon" aria-label="Zurück zum Menü">←</button>
       <div class="info">
         <div id="room-label"></div>
+        <div id="theme-label"></div>
         <div id="role-label"></div>
       </div>
       <div class="stats">

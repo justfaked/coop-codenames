@@ -7,6 +7,7 @@ const ASSASSINS = 2;
 
 // Wird beim Spielstart mit der Raumnummer kombiniert; ändern = neue Spielfelder.
 const SEED_VERSION = 'coop-codenames-v1';
+const DEFAULT_THEME = 'klassisch';
 
 function hashString(str) {
   let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
@@ -43,8 +44,10 @@ function normalizeRoom(input) {
   return digits;
 }
 
-function createBoard(room, words) {
-  const rand = mulberry32(hashString(`${SEED_VERSION}:${room}`));
+// Das klassische Thema behält den ursprünglichen Seed, damit alte Räume gleich bleiben.
+function createBoard(room, theme, words) {
+  const key = theme === DEFAULT_THEME ? room : `${theme}:${room}`;
+  const rand = mulberry32(hashString(`${SEED_VERSION}:${key}`));
   const picked = shuffle(words, rand).slice(0, BOARD_SIZE);
   const roles = shuffle([
     ...Array(AGENTS).fill('agent'),
@@ -87,5 +90,5 @@ function deriveState(board, history) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { BOARD_SIZE, AGENTS, ASSASSINS, normalizeRoom, createBoard, deriveState };
+  module.exports = { BOARD_SIZE, AGENTS, ASSASSINS, DEFAULT_THEME, normalizeRoom, createBoard, deriveState };
 }
