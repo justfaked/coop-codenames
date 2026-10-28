@@ -5,7 +5,7 @@ const $ = (id) => document.getElementById(id);
 const ROLE_LABELS = { chef: 'Geheimdienstchef', ermittler: 'Ermittler' };
 const CARD_LABELS = { agent: 'Richtig', neutral: 'Falsch', assassin: 'Falle' };
 const THEME_ICONS = {
-  klassisch: '🕵️', tiere: '🐾', fantasy: '🐉', harrypotter: '⚡', essen: '🍕', weltraum: '🚀', sport: '⚽',
+  klassisch: '🕵️', tiere: '🐾', fantasy: '🐉', harrypotter: '⚡', essen: '🍕', weltraum: '🚀', sport: '⚽', geografie: '🌍',
 };
 
 let game = null; // { room, theme, role, board, history, selected, justRevealed, resultDismissed }
