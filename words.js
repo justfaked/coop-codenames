@@ -137,17 +137,17 @@ const THEMES = {
   `) },
 
   spicy: { name: 'Spicy (18+)', words: list(`
-    Kuss, Zungenkuss, Knutschfleck, Flirt, Date, Verführung, Lust, Begierde, Leidenschaft, Erotik,
-    Dessous, Spitze, Strapse, Korsett, Tanga, Negligé, Satin, Bademantel, Netzstrümpfe, Latex,
-    Handschellen, Augenbinde, Peitsche, Fesseln, Federboa, Massageöl, Kerzenwachs, Eiswürfel, Sahne, Erdbeere,
-    Champagner, Austern, Schokolade, Whirlpool, Sauna, Wasserbett, Himmelbett, Spiegel, Hotelzimmer, Rücksitz,
-    Striptease, Lapdance, Stange, Burlesque, Rotlicht, Callboy, Domina, Rollenspiel, Krankenschwester, Uniform,
-    Feuerwehrmann, Kostüm, Maske, Vorspiel, Quickie, Kamasutra, Stellung, Missionar, Löffelchen, Orgasmus,
-    Höhepunkt, Kondom, Pille, Vibrator, Massage, Gleitgel, Liebeskugeln, Sexshop, Pornostar, Playboy,
-    Nacktheit, FKK, Bikini, Tattoo, Piercing, Hüftschwung, Po, Busen, Sixpack, Bart,
-    One-Night-Stand, Affäre, Seitensprung, Dreier, Swingerclub, Flitterwochen, Hochzeitsnacht, Liebesnacht, Walk of Shame, Morgenlatte,
-    Schlafzimmer, Dusche, Badewanne, Rosenblätter, Liebesbrief, Sexting, Nacktfoto, Tinder, Match, Lippenstift,
-    Stöhnen, Knistern, Gänsehaut, Herzklopfen, Schmetterlinge, Fetisch, Fantasie, Tabu, Safeword, Aftershow
+    Kuss, Zungenkuss, Knutschfleck, Flirt, Verführung, Lust, Begierde, Erotik, Dessous, Strapse,
+    Korsett, Tanga, Netzstrümpfe, Latex, Leder, Handschellen, Augenbinde, Peitsche, Fesseln, Knebel,
+    Massageöl, Kerzenwachs, Eiswürfel, Sahne, Whirlpool, Wasserbett, Himmelbett, Spiegel, Rücksitz, Striptease,
+    Lapdance, Stange, Rotlicht, Domina, Sklave, Rollenspiel, Uniform, Kostüm, Vorspiel, Quickie,
+    Kamasutra, Missionar, Doggy, Reiterstellung, Löffelchen, 69, Schubkarre, Amazone, Wiener Auster, Lotussitz,
+    Blowjob, Oralsex, Cunnilingus, Analsex, Handjob, Fingern, Deepthroat, Facesitting, Rimming, Petting,
+    Masturbation, Dirty Talk, Spanking, Bondage, BDSM, Lack, Dreier, Gangbang, Swingerclub, Pegging,
+    Orgasmus, Höhepunkt, Squirting, Sperma, Erektion, Morgenlatte, G-Punkt, Klitoris, Penis, Vagina,
+    Nippel, Brüste, Po, Hoden, Kondom, Gleitgel, Vibrator, Dildo, Liebeskugeln, Analplug,
+    Sexshop, Pornostar, Nacktfoto, Sexting, One-Night-Stand, Affäre, Seitensprung, Fetisch, Safeword, Stöhnen,
+    Gänsehaut, Schlafzimmer, Dusche, Hochzeitsnacht, Walk of Shame, Fantasie, Tabu, Nacktheit, Sixpack, Hüftschwung
   `) },
 };
 
