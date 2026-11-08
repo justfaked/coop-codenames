@@ -119,7 +119,8 @@ function render() {
   }
 
   $('stat-found').textContent = `${state.found}/${AGENTS} Richtige`;
-  $('stat-round').textContent = `Runde ${state.round}`;
+  $('stat-round').textContent = `Runde ${state.round}/${MAX_ROUNDS}`;
+  $('stat-round').classList.toggle('last', state.round === MAX_ROUNDS && !state.result);
   $('undo').disabled = game.history.length === 0;
   $('pass').disabled = Boolean(state.result);
 
@@ -132,10 +133,15 @@ function render() {
 
 function hintText(state) {
   if (state.result === 'won') return 'Gewonnen! Alle Richtigen gefunden.';
-  if (state.result === 'lost') return 'Verloren – eine Falle wurde aufgedeckt.';
+  if (state.result === 'lost') {
+    return state.reason === 'rounds'
+      ? `Verloren – nach ${MAX_ROUNDS} Runden nicht alle Richtigen gefunden.`
+      : 'Verloren – eine Falle wurde aufgedeckt.';
+  }
   if (game.selected !== null) return `„${game.board[game.selected].word}“ nochmal antippen zum Aufdecken.`;
-  if (game.role === 'chef') return 'Gib einen Hinweis: ein Wort und eine Zahl.';
-  return 'Tippe auf einen Begriff, um ihn auszuwählen.';
+  const last = state.round === MAX_ROUNDS ? 'Letzte Runde! ' : '';
+  if (game.role === 'chef') return `${last}Gib einen Hinweis: ein Wort und eine Zahl.`;
+  return `${last}Tippe auf einen Begriff, um ihn auszuwählen.`;
 }
 
 function showResult(state) {
@@ -144,7 +150,7 @@ function showResult(state) {
   $('result-title').textContent = won ? 'Gewonnen!' : 'Verloren';
   $('result-text').textContent = won
     ? `Alle ${AGENTS} Richtigen in ${rounds} ${rounds === 1 ? 'Runde' : 'Runden'} gefunden.`
-    : `Eine Falle wurde aufgedeckt. ${state.found} von ${AGENTS} Richtigen gefunden.`;
+    : `${state.reason === 'rounds' ? `Die ${MAX_ROUNDS} Runden sind vorbei.` : 'Eine Falle wurde aufgedeckt.'} ${state.found} von ${AGENTS} Richtigen gefunden.`;
   $('result').classList.toggle('lost', !won);
   $('result').hidden = false;
 }

@@ -4,6 +4,7 @@
 const BOARD_SIZE = 25;
 const AGENTS = 9;
 const ASSASSINS = 2;
+const MAX_ROUNDS = 5;
 
 // Wird beim Spielstart mit der Raumnummer kombiniert; ändern = neue Spielfelder.
 const SEED_VERSION = 'coop-codenames-v1';
@@ -66,11 +67,23 @@ function deriveState(board, history) {
   let found = 0;
   let misses = 0;
   let result = null; // 'won' | 'lost'
+  let reason = null; // bei 'lost': 'trap' | 'rounds'
+
+  // Runde endet (Falsche aufgedeckt oder freiwillig beendet). Nach der letzten
+  // erlaubten Runde ist das Spiel verloren.
+  const endRound = () => {
+    if (round >= MAX_ROUNDS) {
+      result = 'lost';
+      reason = 'rounds';
+    } else {
+      round++;
+    }
+  };
 
   for (const action of history) {
     if (result) break;
     if (action.type === 'pass') {
-      round++;
+      endRound();
       continue;
     }
     if (revealed.has(action.index)) continue;
@@ -81,14 +94,15 @@ function deriveState(board, history) {
       if (found === AGENTS) result = 'won';
     } else if (role === 'assassin') {
       result = 'lost';
+      reason = 'trap';
     } else {
       misses++;
-      round++;
+      endRound();
     }
   }
-  return { revealed, round, found, misses, result };
+  return { revealed, round, found, misses, result, reason };
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { BOARD_SIZE, AGENTS, ASSASSINS, DEFAULT_THEME, normalizeRoom, createBoard, deriveState };
+  module.exports = { BOARD_SIZE, AGENTS, ASSASSINS, MAX_ROUNDS, DEFAULT_THEME, normalizeRoom, createBoard, deriveState };
 }
